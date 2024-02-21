@@ -1,4 +1,5 @@
 import React from 'react';
+import PopularSearch from './PopularSearch';
 
 const Banner = () => {
 	return (
@@ -67,6 +68,8 @@ const Banner = () => {
 					</div>
 				</div>
 			</div>
+
+			<PopularSearch />
 		</div>
 	);
 };
