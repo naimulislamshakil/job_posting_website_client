@@ -1,4 +1,5 @@
 import Banner from '@/components/apps/Home/Banner';
+import CurrentHiring from '@/components/apps/Home/CurrentHiring';
 import JobVacancies from '@/components/apps/Home/JobVacancies.jsx';
 import Image from 'next/image';
 
@@ -7,6 +8,7 @@ export default function Home() {
 		<div>
 			<Banner />
 			<JobVacancies />
+			<CurrentHiring />
 		</div>
 	);
 }
