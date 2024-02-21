@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -85,7 +86,8 @@ const index = () => {
 					href="https://flowbite.com/"
 					class="flex items-center space-x-3 rtl:space-x-reverse"
 				>
-					<img src="/accats/next.svg" class="h-9" alt="Flowbite Logo" />
+					{/* <img src="/accats/next.svg" class="h-9" alt="Flowbite Logo" /> */}
+					<Image height={36} width={200} src="/accats/next.svg" alt="ahsg" />
 				</a>
 				<div class="flex md:order-2   rtl:space-x-reverse">
 					<Link
