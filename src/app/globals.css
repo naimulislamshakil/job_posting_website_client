@@ -10,6 +10,6 @@ html {
 	box-sizing: border-box;
 }
 
-/* .slider .tabs::-webkit-scrollbar {
-	display: none;
-} */
+.icon {
+	transform: scale(3) !important;
+}
