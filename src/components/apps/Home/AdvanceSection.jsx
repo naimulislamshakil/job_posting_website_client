@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import Image from 'next/image';
 import React from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -44,8 +44,7 @@ const AdvanceSection = () => {
 								</h3>
 
 								<h6 className="text-gray-400 text-justify w-full">
-									With a complete profile, your applications and profile are
-									promoted to top employers, so you stand out.
+									With a complete profile.
 								</h6>
 							</div>
 
@@ -62,8 +61,7 @@ const AdvanceSection = () => {
 								</h3>
 
 								<h6 className="text-gray-400 text-justify w-full">
-									With a complete profile, your applications and profile are
-									promoted to top employers, so you stand out.
+									With a complete profile.
 								</h6>
 							</div>
 						</div>
