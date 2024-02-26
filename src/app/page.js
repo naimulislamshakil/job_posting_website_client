@@ -1,3 +1,4 @@
+import AdvanceSection from '@/components/apps/Home/AdvanceSection';
 import Banner from '@/components/apps/Home/Banner';
 import CurrentHiring from '@/components/apps/Home/CurrentHiring';
 import JobVacancies from '@/components/apps/Home/JobVacancies.jsx';
@@ -9,6 +10,7 @@ export default function Home() {
 			<Banner />
 			<JobVacancies />
 			<CurrentHiring />
+			<AdvanceSection />
 		</div>
 	);
 }
