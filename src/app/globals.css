@@ -13,3 +13,10 @@ html {
 .icon {
 	transform: scale(3) !important;
 }
+
+.item {
+	width: 100%;
+	/* background-color: lightgray; */
+	margin-right: 2px;
+	height: 5px;
+}
