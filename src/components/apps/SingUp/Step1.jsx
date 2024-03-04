@@ -46,7 +46,7 @@ const Step1 = () => {
 						<span class="text-base text-gray-500">{step1.p2}</span>
 						<div class="flex mt-4 md:mt-6">
 							<Link
-								href="/"
+								href="/sing_up/Employer"
 								class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
 							>
 								{step1.employerButton}
