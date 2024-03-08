@@ -439,7 +439,7 @@ const Seeker = () => {
 												aria-labelledby="dropdownSearchButton"
 											>
 												{jobFunction?.map((cate, i) => (
-													<li onClick={(e) => add(cate)}>
+													<li key={i} onClick={(e) => add(cate)}>
 														<div class="flex items-center p-2 rounded hover:bg-gray-100">
 															<input
 																id="checkbox-item-11"
