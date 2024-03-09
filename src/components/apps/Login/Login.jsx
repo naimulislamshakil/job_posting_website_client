@@ -1,9 +1,29 @@
+'use client';
+
 import login from '@/config/App/Home/Login';
+import { loginSchema } from '@/config/Schema/Login';
+// import { useFormik } from 'formik';
+import { useFormik } from 'formik';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
+const initialValue = {
+	Email: '',
+	Password: '',
+};
+
 const Login = () => {
+	const { values, touched, errors, handleBlur, handleChange, handleSubmit } =
+		useFormik({
+			initialValues: initialValue,
+			validationSchema: loginSchema,
+			onSubmit: (values) => {
+				console.log(values);
+			},
+		});
+
+	console.log(errors);
 	return (
 		<div className="container mx-auto mt-[85px]">
 			<div className="grid md:grid-cols-3">
@@ -22,10 +42,17 @@ const Login = () => {
 						<input
 							type="email"
 							id="email"
-							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[80%] mb-5 p-2.5"
+							name="Email"
+							value={values.Email}
+							onChange={handleChange}
+							onBlur={handleBlur}
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[80%] mb-1 p-2.5"
 							placeholder="John@gmail.com"
 							required
 						/>
+						{errors.Email && touched.Email ? (
+							<p className="text-red-700 text-xs">{errors.Email}</p>
+						) : null}
 					</div>
 					<div className="mb-3">
 						<label
@@ -37,11 +64,18 @@ const Login = () => {
 						<input
 							type="password"
 							id="password"
-							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[80%] p-2.5"
+							name="Password"
+							value={values.Password}
+							onChange={handleChange}
+							onBlur={handleBlur}
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[80%] p-2.5 mb-1"
 							placeholder="********"
 							required
 							// onChange={(e) => setPassword(e.target.value)}
 						/>
+						{errors.Password && touched.Password ? (
+							<p className="text-red-700 text-xs">{errors.Password}</p>
+						) : null}
 					</div>
 
 					<Link href="/" className="hover:underline text-blue-600">
@@ -66,6 +100,7 @@ const Login = () => {
 					<div className="">
 						<button
 							type="submit"
+							onClick={handleSubmit}
 							class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
 						>
 							LogIn
