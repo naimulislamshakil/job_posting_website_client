@@ -9,16 +9,59 @@ import seeker, {
 import React, { useEffect, useState } from 'react';
 import PasswordStrength from './PasswordStrength';
 import Link from 'next/link';
+import { countryCodes } from '@/config/App/SingUp/Country';
+import {
+	countries,
+	cities,
+	getCitiesByCountryCode,
+} from 'country-city-location';
+import { dobDays, dobMonths, dobyears } from '@/config/App/SingUp/Date';
+import { useFormik } from 'formik';
+import { seekerSchema } from '@/config/Schema/Seeker';
+
+const initialValue = {
+	First_Name: '',
+	Last_Name: '',
+	Email: '',
+	Days: '',
+	Months: '',
+	Years: '',
+	Gender: '',
+	Nationality: '',
+	Location: '',
+	Country_Code: '',
+	Phone_Number: '',
+	Qualification: '',
+	Experience: '',
+	Job_Function: '',
+	Availability: '',
+};
 
 const Seeker = () => {
 	const [password, setPassword] = useState('');
+	const [nationality, setNationality] = useState('GH');
+	const years = dobyears();
+	const days = dobDays();
 	const job = [];
+
+	const { values, touched, errors, handleBlur, handleChange, handleSubmit } =
+		useFormik({
+			initialValues: initialValue,
+			validationSchema: seekerSchema,
+			onSubmit: (values) => {
+				console.log({ values });
+			},
+		});
+
+	console.log(errors);
 
 	const add = (cate) => {
 		job.push(cate);
 		console.log(job.length);
 		// console.log(cate);
 	};
+
+	const cities = getCitiesByCountryCode(nationality);
 
 	return (
 		<div className="container mx-auto mt-28">
@@ -56,10 +99,19 @@ const Seeker = () => {
 										<input
 											type="text"
 											id="first_name"
+											name="First_Name"
+											value={values.First_Name}
+											onChange={handleChange}
+											onBlur={handleBlur}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="John"
 											required
 										/>
+										{errors.First_Name && touched.First_Name ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.First_Name}
+											</p>
+										) : null}
 									</div>
 									<div>
 										<label
@@ -71,10 +123,19 @@ const Seeker = () => {
 										<input
 											type="text"
 											id="last_name"
+											name="Last_Name"
+											value={values.Last_Name}
+											onChange={handleChange}
+											onBlur={handleBlur}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="Doe"
 											required
 										/>
+										{errors.Last_Name && touched.Last_Name ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.Last_Name}
+											</p>
+										) : null}
 									</div>
 								</div>
 
@@ -90,10 +151,19 @@ const Seeker = () => {
 										<input
 											type="email"
 											id="email"
+											name="Email"
+											value={values.Email}
+											onChange={handleChange}
+											onBlur={handleBlur}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="John@gmail.com"
 											required
 										/>
+										{errors.Email && touched.Email ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.Email}
+											</p>
+										) : null}
 									</div>
 									<div>
 										<label
@@ -129,39 +199,69 @@ const Seeker = () => {
 										<div>
 											<select
 												id="dob"
+												name="Days"
+												value={values.Days}
+												onChange={handleChange}
+												onBlur={handleBlur}
 												class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											>
 												<option selected>Day</option>
-												<option value="US">United States</option>
-												<option value="CA">Canada</option>
-												<option value="FR">France</option>
-												<option value="DE">Germany</option>
+												{days?.map((day, i) => (
+													<option value={day} key={i}>
+														{day}
+													</option>
+												))}
 											</select>
+											{errors.Days && touched.Days ? (
+												<p className="text-red-700 text-xs mt-1">
+													{errors.Days}
+												</p>
+											) : null}
 										</div>
 										<div>
 											<select
 												id="dob"
+												name="Months"
+												value={values.Months}
+												onChange={handleChange}
+												onBlur={handleBlur}
 												class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											>
 												<option selected>Month</option>
-												<option value="US">United States</option>
-												<option value="CA">Canada</option>
-												<option value="FR">France</option>
-												<option value="DE">Germany</option>
+												{dobMonths?.map((month, i) => (
+													<option value={month} key={i}>
+														{month}
+													</option>
+												))}
 											</select>
+											{errors.Months && touched.Months ? (
+												<p className="text-red-700 text-xs mt-1">
+													{errors.Months}
+												</p>
+											) : null}
 										</div>
 
 										<div>
 											<select
 												id="dob"
+												name="Years"
+												value={values.Years}
+												onChange={handleChange}
+												onBlur={handleBlur}
 												class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											>
 												<option selected>Year</option>
-												<option value="US">United States</option>
-												<option value="CA">Canada</option>
-												<option value="FR">France</option>
-												<option value="DE">Germany</option>
+												{years?.map((year, i) => (
+													<option value={year} key={i}>
+														{year}
+													</option>
+												))}
 											</select>
+											{errors.Years && touched.Years ? (
+												<p className="text-red-700 text-xs mt-1">
+													{errors.Years}
+												</p>
+											) : null}
 										</div>
 									</div>
 								</div>
@@ -177,6 +277,10 @@ const Seeker = () => {
 										</label>
 										<select
 											id="gender"
+											name="Gender"
+											value={values.Gender}
+											onChange={handleChange}
+											onBlur={handleBlur}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 										>
 											<option selected value="male">
@@ -184,6 +288,11 @@ const Seeker = () => {
 											</option>
 											<option value="female">Female</option>
 										</select>
+										{errors.Gender && touched.Gender ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.Gender}
+											</p>
+										) : null}
 									</div>
 									<div>
 										<label
@@ -194,14 +303,27 @@ const Seeker = () => {
 										</label>
 										<select
 											id="nationality"
+											name="Nationality"
+											value={values.Nationality}
+											// onChange={handleChange}
+											// onBlur={handleBlur}
+											onChange={(e) => setNationality(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+											required
 										>
-											<option selected>Choose a country</option>
-											<option value="US">United States</option>
-											<option value="CA">Canada</option>
-											<option value="FR">France</option>
-											<option value="DE">Germany</option>
+											{countryCodes?.map((code, i) => (
+												<option
+													selected={code.name === 'Ghana'}
+													value={`${code.code}`}
+													key={i}
+												>{`${code.name}`}</option>
+											))}
 										</select>
+										{errors.Nationality && touched.Nationality ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.Nationality}
+											</p>
+										) : null}
 									</div>
 
 									<div>
@@ -213,14 +335,24 @@ const Seeker = () => {
 										</label>
 										<select
 											id="location"
+											name="Location"
+											value={values.Location}
+											onChange={handleChange}
+											onBlur={handleBlur}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 										>
-											<option selected>Choose a country</option>
-											<option value="US">United States</option>
-											<option value="CA">Canada</option>
-											<option value="FR">France</option>
-											<option value="DE">Germany</option>
+											{cities.map((code, i) => (
+												<option
+													value={`${code.name}`}
+													key={i}
+												>{`${code.name}`}</option>
+											))}
 										</select>
+										{errors.Location && touched.Location ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.Location}
+											</p>
+										) : null}
 									</div>
 								</div>
 
@@ -236,14 +368,25 @@ const Seeker = () => {
 										</label>
 										<select
 											id="cc"
+											name="Country_Code"
+											value={values.Country_Code}
+											onChange={handleChange}
+											onBlur={handleBlur}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 										>
-											<option selected>Choose a country</option>
-											<option value="US">United States</option>
-											<option value="CA">Canada</option>
-											<option value="FR">France</option>
-											<option value="DE">Germany</option>
+											{countryCodes?.map((code, i) => (
+												<option
+													selected={code.name === 'Ghana'}
+													value={`${code.name} ${code.dial_code}`}
+													key={i}
+												>{`${code.name} ${code.dial_code}`}</option>
+											))}
 										</select>
+										{errors.Country_Code && touched.Country_Code ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.Country_Code}
+											</p>
+										) : null}
 									</div>
 									<div>
 										<label
@@ -255,11 +398,19 @@ const Seeker = () => {
 										<input
 											type="text"
 											id="pn"
+											name="Phone_Number"
+											value={values.Phone_Number}
+											onChange={handleChange}
+											onBlur={handleBlur}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="9754234891"
 											required
-											onChange={(e) => setPassword(e.target.value)}
 										/>
+										{errors.Phone_Number && touched.Phone_Number ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.Phone_Number}
+											</p>
+										) : null}
 									</div>
 								</div>
 
@@ -269,13 +420,6 @@ const Seeker = () => {
 										{seeker?.login}
 									</Link>
 								</div>
-
-								<button
-									type="submit"
-									class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-								>
-									Submit
-								</button>
 							</form>
 						</div>
 					</div>
@@ -315,6 +459,10 @@ const Seeker = () => {
 										</label>
 										<select
 											id="hq"
+											name="Qualification"
+											value={values.Qualification}
+											onChange={handleChange}
+											onBlur={handleBlur}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 										>
 											{highest_qualification?.map((edu, i) => (
@@ -323,6 +471,11 @@ const Seeker = () => {
 												</option>
 											))}
 										</select>
+										{errors.Qualification && touched.Qualification ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.Qualification}
+											</p>
+										) : null}
 									</div>
 									<div>
 										<label
@@ -333,6 +486,10 @@ const Seeker = () => {
 										</label>
 										<select
 											id="experience"
+											name="Experience"
+											value={values.Experience}
+											onChange={handleChange}
+											onBlur={handleBlur}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 										>
 											{years_of_experience?.map((years, i) => (
@@ -341,6 +498,11 @@ const Seeker = () => {
 												</option>
 											))}
 										</select>
+										{errors.Experience && touched.Experience ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.Experience}
+											</p>
+										) : null}
 									</div>
 								</div>
 
@@ -355,6 +517,10 @@ const Seeker = () => {
 										</label>
 										<select
 											id="current"
+											name="Job_Function"
+											value={values.Job_Function}
+											onChange={handleChange}
+											onBlur={handleBlur}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 										>
 											{current_job_function?.map((fun, i) => (
@@ -363,6 +529,11 @@ const Seeker = () => {
 												</option>
 											))}
 										</select>
+										{errors.Job_Function && touched.Job_Function ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.Job_Function}
+											</p>
+										) : null}
 									</div>
 
 									<div>
@@ -370,7 +541,7 @@ const Seeker = () => {
 											for=""
 											class="block mb-2 text-sm font-medium text-gray-900"
 										>
-											Location
+											Desired Job Function
 										</label>
 
 										{/* dropdown */}
@@ -473,6 +644,10 @@ const Seeker = () => {
 										</label>
 										<select
 											id="availability"
+											name="Availability"
+											value={values.Availability}
+											onChange={handleChange}
+											onBlur={handleBlur}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 										>
 											{availability?.map((time, i) => (
@@ -481,6 +656,11 @@ const Seeker = () => {
 												</option>
 											))}
 										</select>
+										{errors.Availability && touched.Availability ? (
+											<p className="text-red-700 text-xs mt-1">
+												{errors.Availability}
+											</p>
+										) : null}
 									</div>
 								</div>
 
