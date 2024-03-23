@@ -69,7 +69,7 @@ export const typeofEmployer = [
 	'Recruitment Agency',
 ];
 
-export const hearUs = [
+export const hearUss = [
 	'Select...',
 	'Google search',
 	'Social media (e.g., Facebook, Instagram, Twitter)',

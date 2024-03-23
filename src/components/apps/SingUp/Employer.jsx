@@ -1,7 +1,7 @@
 'use client';
 import employer, {
 	employers,
-	hearUs,
+	hearUss,
 	industrys,
 	positions,
 	typeofEmployer,
@@ -19,39 +19,83 @@ import Link from 'next/link';
 import { useFormik } from 'formik';
 import { countryCodes } from '@/config/App/SingUp/Country';
 import { employerSchema } from '@/config/Schema/Employer';
-
-const initialValue = {
-	First_Name: '',
-	Last_Name: '',
-	Email: '',
-	Position: '',
-	Country_Code: '',
-	Number: '',
-	Company_Name: '',
-	Industry: '',
-	Employees: '',
-	EmployerType: '',
-	Website: '',
-	HearUs: '',
-	Contact_Person: '',
-	Notification_Email: '',
-	Cuntry: '',
-	Address: '',
-	Phone_Number: '',
-	CountryCode: '',
-};
+import { url } from '@/config/App/Home/url';
+import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const Employer = () => {
+	const router = useRouter();
+	const [first_Name, setFirst_Name] = useState('');
+	const [last_Name, setLast_Name] = useState('');
+	const [email, setEmail] = useState('');
+	const [position, setPosition] = useState('');
+	const [country_Code, setCountry_Code] = useState('');
+	const [number, setNumber] = useState('');
+	const [company_Name, setCompany_Name] = useState('');
+	const [industry, setIndustry] = useState('');
+	const [employees, setEmployees] = useState('');
+	const [employerType, setEmployerType] = useState('');
+	const [website, setWebsite] = useState('');
+	const [hearUs, setHearUs] = useState('');
+	const [contact_Person, setContact_Person] = useState('');
+	const [notification_Email, setNotification_Email] = useState('');
+	const [country, setCountry] = useState('');
+	const [address, setAddress] = useState('');
+	const [phone_Number, setPhone_Number] = useState('');
+	const [countryCode, setCountryCode] = useState('');
 	const [password, setPassword] = useState('');
+	const [message, setMessage] = useState({});
 
-	const { values, touched, errors, handleBlur, handleChange, handleSubmit } =
-		useFormik({
-			initialValues: initialValue,
-			validationSchema: employerSchema,
-			onSubmit: (values) => {
-				console.log(values);
+	const onSubmit = async (event) => {
+		event.preventDefault();
+		const info = {
+			first_Name,
+			last_Name,
+			email,
+			position,
+			country_Code,
+			number,
+			company_Name,
+			industry,
+			employees,
+			employerType,
+			website,
+			hearUs,
+			contact_Person,
+			notification_Email,
+			country,
+			address,
+			phone_Number,
+			countryCode,
+			password,
+		};
+
+		await fetch(`${url}/singup`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
 			},
-		});
+			body: JSON.stringify(info),
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.success === false) {
+					toast.error(data.message);
+
+					if (data.status === 409) {
+						router.push('/login');
+					}
+				} else {
+					toast.success(data.message);
+					router.push('/login');
+				}
+			})
+			.catch((err) => console.log(err));
+
+		// if(message.)
+		console.log(message);
+	};
 
 	return (
 		<div className="container mx-auto mt-28">
@@ -90,19 +134,12 @@ const Employer = () => {
 											type="text"
 											id="first_name"
 											name="First_Name"
-											value={values.First_Name}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={first_Name}
+											onChange={(e) => setFirst_Name(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="John"
 											required
 										/>
-
-										{errors.First_Name && touched.First_Name ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.First_Name}
-											</p>
-										) : null}
 									</div>
 									<div>
 										<label
@@ -115,18 +152,12 @@ const Employer = () => {
 											type="text"
 											id="last_name"
 											name="Last_Name"
-											value={values.Last_Name}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={last_Name}
+											onChange={(e) => setLast_Name(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="Doe"
 											required
 										/>
-										{errors.Last_Name && touched.Last_Name ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.Last_Name}
-											</p>
-										) : null}
 									</div>
 								</div>
 
@@ -143,18 +174,12 @@ const Employer = () => {
 											type="email"
 											id="email"
 											name="Email"
-											value={values.Email}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={email}
+											onChange={(e) => setEmail(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="John@company.com"
 											required
 										/>
-										{errors.Email && touched.Email ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.Email}
-											</p>
-										) : null}
 									</div>
 									<div>
 										<label
@@ -192,10 +217,10 @@ const Employer = () => {
 											<select
 												id="dob"
 												name="Position"
-												value={values.Position}
-												onChange={handleChange}
-												onBlur={handleBlur}
+												value={position}
+												onChange={(e) => setPosition(e.target.value)}
 												class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+												required
 											>
 												{positions?.map((position, i) => (
 													<option key={i} value={position}>
@@ -203,11 +228,6 @@ const Employer = () => {
 													</option>
 												))}
 											</select>
-											{errors.Position && touched.Position ? (
-												<p className="text-red-700 text-xs mt-1">
-													{errors.Position}
-												</p>
-											) : null}
 										</div>
 									</div>
 								</div>
@@ -225,10 +245,10 @@ const Employer = () => {
 										<select
 											id="cc"
 											name="Country_Code"
-											value={values?.Country_Code}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={country_Code}
+											onChange={(e) => setCountry_Code(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+											required
 										>
 											{countryCodes?.map((code, i) => (
 												<option
@@ -238,12 +258,6 @@ const Employer = () => {
 												>{`${code.name} ${code.dial_code}`}</option>
 											))}
 										</select>
-
-										{errors.Country_Code && touched.Country_Code ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.Country_Code}
-											</p>
-										) : null}
 									</div>
 									<div>
 										<label
@@ -256,18 +270,12 @@ const Employer = () => {
 											type="text"
 											id="pn"
 											name="Number"
-											value={values.Number}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={number}
+											onChange={(e) => setNumber(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="9754234891"
 											required
 										/>
-										{errors.Number && touched.Number ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.Number}
-											</p>
-										) : null}
 									</div>
 								</div>
 
@@ -317,18 +325,12 @@ const Employer = () => {
 											type="text"
 											id="first_name"
 											name="Company_Name"
-											value={values.Company_Name}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={company_Name}
+											onChange={(e) => setCompany_Name(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="Webminds"
 											required
 										/>
-										{errors.Company_Name && touched.Company_Name ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.Company_Name}
-											</p>
-										) : null}
 									</div>
 									<div>
 										<label
@@ -340,9 +342,8 @@ const Employer = () => {
 										<select
 											id="hq"
 											name="Industry"
-											value={values.Industry}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={industry}
+											onChange={(e) => setIndustry(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 										>
 											{industrys?.map((industry, i) => (
@@ -351,11 +352,6 @@ const Employer = () => {
 												</option>
 											))}
 										</select>
-										{errors.Industry && touched.Industry ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.Industry}
-											</p>
-										) : null}
 									</div>
 								</div>
 
@@ -372,10 +368,10 @@ const Employer = () => {
 										<select
 											id="hq"
 											name="Employees"
-											value={values.Employees}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={employees}
+											onChange={(e) => setEmployees(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+											required
 										>
 											{employers?.map((number, i) => (
 												<option key={i} value={number}>
@@ -383,11 +379,6 @@ const Employer = () => {
 												</option>
 											))}
 										</select>
-										{errors.Employees && touched.Employees ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.Employees}
-											</p>
-										) : null}
 									</div>
 									<div>
 										<label
@@ -399,9 +390,8 @@ const Employer = () => {
 										<select
 											id="experience"
 											name="EmployerType"
-											value={values.EmployerType}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={employerType}
+											onChange={(e) => setEmployerType(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 										>
 											{typeofEmployer?.map((type, i) => (
@@ -410,11 +400,6 @@ const Employer = () => {
 												</option>
 											))}
 										</select>
-										{errors.EmployerType && touched.EmployerType ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.EmployerType}
-											</p>
-										) : null}
 									</div>
 								</div>
 
@@ -430,18 +415,12 @@ const Employer = () => {
 											type="url"
 											id="first_name"
 											name="Website"
-											value={values.Website}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={website}
+											onChange={(e) => setWebsite(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="webmindsit.com"
 											required
 										/>
-										{errors.Website && touched.Website ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.Website}
-											</p>
-										) : null}
 									</div>
 									<div>
 										<label
@@ -453,22 +432,16 @@ const Employer = () => {
 										<select
 											id="hq"
 											name="HearUs"
-											value={values.HearUs}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={hearUs}
+											onChange={(e) => setHearUs(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 										>
-											{hearUs?.map((type, i) => (
+											{hearUss?.map((type, i) => (
 												<option key={i} value={type}>
 													{type}
 												</option>
 											))}
 										</select>
-										{errors.HearUs && touched.HearUs ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.HearUs}
-											</p>
-										) : null}
 									</div>
 								</div>
 
@@ -484,18 +457,12 @@ const Employer = () => {
 											type="text"
 											id="first_name"
 											name="Contact_Person"
-											value={values.Contact_Person}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={contact_Person}
+											onChange={(e) => setContact_Person(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="Jon"
 											required
 										/>
-										{errors.Contact_Person && touched.Contact_Person ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.Contact_Person}
-											</p>
-										) : null}
 									</div>
 									<div>
 										<label
@@ -508,18 +475,12 @@ const Employer = () => {
 											type="email"
 											id="first_name"
 											name="Notification_Email"
-											value={values.Notification_Email}
-											onChange={handleChange}
-											onBlur={handleBlur}
+											value={notification_Email}
+											onChange={(e) => setNotification_Email(e.target.value)}
 											class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											placeholder="Jon@gmail.com"
 											required
 										/>
-										{errors.Notification_Email && touched.Notification_Email ? (
-											<p className="text-red-700 text-xs mt-1">
-												{errors.Notification_Email}
-											</p>
-										) : null}
 									</div>
 								</div>
 
@@ -535,9 +496,8 @@ const Employer = () => {
 											<select
 												id="dob"
 												name="CountryCode"
-												value={values.CountryCode}
-												onChange={handleChange}
-												onBlur={handleBlur}
+												value={countryCode}
+												onChange={(e) => setCountryCode(e.target.value)}
 												class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 											>
 												{countryCodes?.map((code, i) => (
@@ -548,11 +508,6 @@ const Employer = () => {
 													>{`${code.name} ${code.dial_code}`}</option>
 												))}
 											</select>
-											{errors.CountryCode && touched.CountryCode ? (
-												<p className="text-red-700 text-xs mt-1">
-													{errors.CountryCode}
-												</p>
-											) : null}
 										</div>
 										<div>
 											<label
@@ -565,18 +520,12 @@ const Employer = () => {
 												type="text"
 												id="first_name"
 												name="Phone_Number"
-												value={values.Phone_Number}
-												onChange={handleChange}
-												onBlur={handleBlur}
+												value={phone_Number}
+												onChange={(e) => setPhone_Number(e.target.value)}
 												class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 												placeholder="9256123567"
 												required
 											/>
-											{errors.Phone_Number && touched.Phone_Number ? (
-												<p className="text-red-700 text-xs mt-1">
-													{errors.Phone_Number}
-												</p>
-											) : null}
 										</div>
 
 										<div>
@@ -589,10 +538,10 @@ const Employer = () => {
 											<select
 												id="dob"
 												name="Cuntry"
-												value={values.Cuntry}
-												onChange={handleChange}
-												onBlur={handleBlur}
+												value={country}
+												onChange={(e) => setCountry(e.target.value)}
 												class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+												required
 											>
 												{countryCodes?.map((code, i) => (
 													<option
@@ -604,11 +553,6 @@ const Employer = () => {
 													</option>
 												))}
 											</select>
-											{errors.Cuntry && touched.Cuntry ? (
-												<p className="text-red-700 text-xs mt-1">
-													{errors.Cuntry}
-												</p>
-											) : null}
 										</div>
 									</div>
 								</div>
@@ -624,18 +568,12 @@ const Employer = () => {
 										id="message"
 										rows="4"
 										name="Address"
-										value={values.Address}
-										onChange={handleChange}
-										onBlur={handleBlur}
+										value={address}
+										onChange={(e) => setAddress(e.target.value)}
 										class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										placeholder="Write your Address..."
+										required
 									></textarea>
-
-									{errors.Address && touched.Address ? (
-										<p className="text-red-700 text-xs mt-1">
-											{errors.Address}
-										</p>
-									) : null}
 								</div>
 
 								<div class="flex items-center my-6">
@@ -670,6 +608,7 @@ const Employer = () => {
 								<button
 									type="submit"
 									class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+									onClick={onSubmit}
 								>
 									Create Your Account
 								</button>
